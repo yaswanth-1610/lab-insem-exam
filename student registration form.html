@@ -1,0 +1,93 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration Form</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: lightblue;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background: white;
+            padding: 30px;
+            width: 300px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>Student Registration Form</h2>
+
+        <form id="registerForm">
+            <input type="text" id="name" placeholder="Enter Name" required>
+            <input type="email" id="email" placeholder="Enter Email" required>
+            <input type="password" id="password" placeholder="Enter Password" required>
+            <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+
+            <button type="submit">Register</button>
+            <p id="message"></p>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("registerForm").addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            let name = document.getElementById("name").value.trim();
+            let email = document.getElementById("email").value.trim().toLowerCase();
+            let password = document.getElementById("password").value;
+            let confirmPassword = document.getElementById("confirmPassword").value;
+            let message = document.getElementById("message");
+
+            if (password !== confirmPassword) {
+                message.innerText = "Passwords do not match!";
+                message.style.color = "red";
+                return;
+            }
+
+            let students = JSON.parse(localStorage.getItem("students")) || [];
+
+            if (students.some(student => student.email === email)) {
+                message.innerText = "Email already registered!";
+                message.style.color = "red";
+                return;
+            }
+
+            students.push({ name, email, password });
+            localStorage.setItem("students", JSON.stringify(students));
+
+            message.innerText = "Registration successful!";
+            message.style.color = "green";
+
+            document.getElementById("registerForm").reset();
+        });
+    </script>
+
+</body>
+</html>
+
